@@ -1,27 +1,48 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import { getBatch } from '../utils/helper';
 
 export type Status = 'non-trafficked' | 'trafficked' | 'rescued' | 'empowered' | 'reintegrated';
 
-export interface IPerson extends Document {
-  name: string;
-  dob: string;
-  gender: string;
-  contact: string;
-  address: string;
-  currentStatus: Status;
-  statusHistory: { status: Status, date: Date }[];
-  createdBy: Schema.Types.ObjectId;
-}
-
-const personSchema = new Schema<IPerson>({
+const personSchema = new Schema({
   name: String,
   dob: String,
   gender: String,
   contact: String,
   address: String,
-  currentStatus: { type: String, enum: ['non-trafficked', 'trafficked', 'rescued', 'empowered', 'reintegrated'], default: 'non-trafficked' },
-  statusHistory: [{ status: String, date: Date }],
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+  code: {
+    type: String,
+    required: true,
+    enum: ['women', 'child']
+  },
+  statusHistory: [{
+    status: {
+      type: String,
+      enum: ['non-trafficked', 'trafficked', 'rescued', 'empowered', 'reintegrated']
+    },
+    date: { type: Date, default: Date.now },
+    batch: {
+      year: Number,
+      quarter: Number
+    }
+  }],
+  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  assignedTo: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  messages: [String],
 }, { timestamps: true });
 
-export default mongoose.model<IPerson>('Person', personSchema);
+// Middleware to automatically set the batch when a new status is added
+personSchema.pre('save', function (next) {
+  const person = this;
+  // If statusHistory was modified
+  if (person.isModified('statusHistory')) {
+    // Get the latest status entry
+    const latestStatus = person.statusHistory[person.statusHistory.length - 1];
+    if (latestStatus && !latestStatus.batch) {
+      // Generate batch info for the new status
+      latestStatus.batch = getBatch(latestStatus.date);
+    }
+  }
+  next();
+});
+
+export default mongoose.model('Person', personSchema);
