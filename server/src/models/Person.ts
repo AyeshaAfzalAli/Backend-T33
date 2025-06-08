@@ -3,14 +3,18 @@ import { getBatch } from '../utils/helper';
 import type { Status } from '../utils/types';
 
 const personSchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    unique: true,
+    required: true
+  },
   dob: String,
   gender: String,
   contact: String,
   address: String,
   code: {
     type: String,
-    required: true,
+    // required: true,
     enum: ['women', 'child']
   },
   statusHistory: [{
@@ -30,8 +34,8 @@ const personSchema = new Schema({
       quarter: Number
     }
   }],
-  createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  assignedTo: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  createdBy: { type: String, required: true },
+  assignedTo: { type: String, required: true },
   messages: [String],
 }, { timestamps: true });
 
