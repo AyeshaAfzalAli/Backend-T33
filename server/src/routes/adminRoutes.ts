@@ -3,14 +3,9 @@ import { getBatchAnalysisByYearQuarter, getAllUniqueBatches, getBatchAnalysisByB
 
 const router = express.Router();
 
-// Get current batch analysis
-router.get('/:aid/dashboard/batch', getBatchAnalysisByYearQuarter as RequestHandler);
-
-// Get all unique batches
-router.get('/:aid/dashboard/batch', getAllUniqueBatches);
-
-router.get('/:aid/dashboard/batch/:batch_no', getBatchAnalysisByBatchNo as RequestHandler);
-
-router.get('/:aid/dashboard/person/:pid', getPersonById as RequestHandler);
+router.get('/:aname/dashboard/batch/:year/:quarter', getBatchAnalysisByYearQuarter as RequestHandler);
+router.get('/:aname/dashboard/batch', getAllUniqueBatches);
+router.get('/:aname/dashboard/batch/:batch_no', getBatchAnalysisByBatchNo as RequestHandler);
+router.get('/:aname/dashboard/person/:pname', getPersonById as RequestHandler);
 
 export default router; 

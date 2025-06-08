@@ -27,11 +27,10 @@ export const getPersonById = async (req: Request, res: Response) => {
         const person = await Person.findOne({
             name: pname,
             createdBy: vname,
-            'statusHistory.status': 'non-trafficked'
         });
 
         if (!person) return res.status(404).send({ error: 'Person not found or unauthorized' });
-        res.send(person);
+        res.send(person.toJSON());
     } catch {
         res.status(500).send({ error: 'Failed to fetch person' });
     }

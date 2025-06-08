@@ -3,11 +3,11 @@ import { getMyPersons, getPersonById, createPerson, deletePerson, serveForm, upd
 
 const router = express.Router();
 
-router.get('/:vid/Person', getMyPersons as RequestHandler);
-router.get('/:vid/Person/:pid', getPersonById as RequestHandler);
-router.post('/:vid/Person', createPerson as RequestHandler);
-router.delete('/:vid/Person/:pid', deletePerson as RequestHandler);
-router.get('/:vid/Person/:pid/edit', serveForm as RequestHandler);
-router.patch('/:vid/Person/:pid', updatePerson as RequestHandler);
+router.get('/:vname/Person', getMyPersons as RequestHandler);
+router.get('/:vname/Person/:pname', getPersonById as RequestHandler);
+router.post('/:vname/Person', createPerson as RequestHandler);
+router.delete('/:vname/Person/:pname', deletePerson as RequestHandler);
+router.get('/:vname/Person/:pname/edit', serveForm as RequestHandler);
+router.patch('/:vname/Person/:pname', updatePerson as RequestHandler);
 
 export default router;
