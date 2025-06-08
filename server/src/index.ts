@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 
 import userRoutes from './routes/userRoutes';
-import personRoutes from './routes/personRoutes';
 
 dotenv.config();
 const app = express();

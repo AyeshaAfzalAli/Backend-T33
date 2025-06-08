@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { getBatch } from '../utils/helper';
-
-export type Status = 'non-trafficked' | 'trafficked' | 'rescued' | 'empowered' | 'reintegrated';
+import type { Status } from '../utils/types';
 
 const personSchema = new Schema({
   name: String,
@@ -17,7 +16,13 @@ const personSchema = new Schema({
   statusHistory: [{
     status: {
       type: String,
-      enum: ['non-trafficked', 'trafficked', 'rescued', 'empowered', 'reintegrated']
+      enum: Object.values({
+        outreach: 'outreach',
+        trafficked: 'trafficked',
+        rescued: 'rescued',
+        empowered: 'empowered',
+        reintegrated: 'reintegrated'
+      } as Record<Status, Status>)
     },
     date: { type: Date, default: Date.now },
     batch: {
